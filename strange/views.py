@@ -7,6 +7,10 @@ from strange.models import Order, Item
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.decorators import api_view, action
+from rest_framework.permissions import IsAuthenticated
+from .serializers import MyTokenObtainPairSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 # Create your views here.
@@ -68,3 +72,7 @@ class ItemViewSet(viewsets.ModelViewSet):
             Item.objects.create(order=order, name=name, condition=condition, **oi)
             ##returning an httpresponse
         return HttpResponse(order)
+
+class MyObtainTokenPairView(TokenObtainPairView):
+    permission_classes = (AllowAny,)
+    serializer_class = MyTokenObtainPairSerializer
