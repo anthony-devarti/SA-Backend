@@ -20,12 +20,13 @@ class Order(models.Model):
 
 
     def __str__(self):
-        return "Order" + self.seller
+        return "Order" + str(self.id)
 
 class Item(models.Model):
-    order_number = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     set_name = models.CharField(max_length=200)
+    condition = models.IntegerField()
 
     def __str__(self):
         return self.name
