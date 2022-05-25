@@ -20,7 +20,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['id']
+    filterset_fields = ['id', 'buyer__id']
 
 class ItemViewSet(viewsets.ModelViewSet):
     """
