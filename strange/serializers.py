@@ -44,3 +44,18 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token['username'] = user.username
         return token
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id', 
+            'last_login', 
+            'username', 
+            'first_name', 
+            'last_name', 
+            'email', 
+            'is_active', 
+            'groups'
+        ]
+        depth = 1
