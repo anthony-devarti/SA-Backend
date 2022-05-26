@@ -15,3 +15,6 @@ vscode:
     - ms-python.python
     - formulahendry.code-runner
     - ms-toolsai.jupyter-keymap
+ports:
+  - port: 8000
+    visibility: public

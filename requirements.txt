@@ -25,6 +25,7 @@ Django==4.0.4
 django-cors-headers==3.12.0
 django-filter==21.1
 djangorestframework==3.13.1
+djangorestframework-simplejwt==5.2.0
 docutils==0.18.1
 drf-writable-nested==0.6.3
 entrypoints==0.4
@@ -82,6 +83,7 @@ pycparser==2.21
 pydocstyle==6.1.1
 pyflakes==2.4.0
 Pygments==2.11.2
+PyJWT==2.4.0
 pylama==8.3.7
 pylint==2.12.2
 pyparsing==3.0.7

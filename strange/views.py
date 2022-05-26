@@ -2,11 +2,15 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, permissions
-from strange.serializers import OrderSerializer, ItemSerializer
+from strange.serializers import OrderSerializer, ItemSerializer, UserSerializer
 from strange.models import Order, Item
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.decorators import api_view, action
+from rest_framework.permissions import IsAuthenticated
+from .serializers import MyTokenObtainPairSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 # Create your views here.
@@ -20,7 +24,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['id']
+    filterset_fields = ['id', 'buyer__id']
 
 class ItemViewSet(viewsets.ModelViewSet):
     """
@@ -28,26 +32,6 @@ class ItemViewSet(viewsets.ModelViewSet):
     """
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
-
-    ##This is what the order object will look like from the frontend
-    # const orderObject = {
-    #   "total_paid": total,
-    #   "pub_date": "now",
-    #   "suggested": suggested,
-    #   "delta": difference,
-    #   "seller": "Unknown",
-    #   "note": "None",
-    #   "buyer": userid (hard code this as 1 for now)
-    #   order_items: cart,
-    #   method: method (hard code this as 1 for now)
-    # }
-    ## This is what it looked like originally
-    #   const orderObject = {
-    #     total: total,
-    #     paid: true,
-    #     user: state.currentUser.user_id,
-    #     order_items: cart,
-    #}
     
     @action(detail=False, methods=['POST'], name='Create orders')
     def create_orders(self, request):
@@ -68,3 +52,16 @@ class ItemViewSet(viewsets.ModelViewSet):
             Item.objects.create(order=order, name=name, condition=condition, **oi)
             ##returning an httpresponse
         return HttpResponse(order)
+
+class MyObtainTokenPairView(TokenObtainPairView):
+    permission_classes = (AllowAny,)
+    serializer_class = MyTokenObtainPairSerializer
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API Endpoint for Users
+    """
+    queryset=User.objects.all()
+    serializer_class = UserSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['id', 'groups__name']
